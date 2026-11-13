@@ -4,6 +4,11 @@ A command-line File Integrity Monitoring (FIM) tool written in Python.
 It watches directories for changes by comparing SHA-256 file hashes against
 a stored baseline, and records every detected change in an audit history.
 
+The initial release focuses on reliable manual scanning and persistent
+change auditing. The architecture is designed for extension: continuous
+filesystem monitoring (`monitor.py`) and additional notification channels
+are planned follow-up phases (see Roadmap).
+
 ## Features
 
 - Register multiple directories for monitoring (each gets its own database)
@@ -16,7 +21,7 @@ a stored baseline, and records every detected change in an audit history.
 
 ## Requirements
 
-- Python 3.10 or newer
+- Python 3.10 or newer (developed against Python 3.13)
 - No third-party dependencies (standard library only)
 
 ## How It Works
@@ -40,6 +45,7 @@ a stored baseline, and records every detected change in an audit history.
 | `detector.py`  | Baseline-vs-scan comparison, event classification           |
 | `database.py`  | SQLite storage: baseline, audit log, searches               |
 | `alerts.py`    | Console presentation of events and scan summaries           |
+| `monitor.py`   | Continuous filesystem monitoring (planned — not yet implemented) |
 
 ## Integrity States
 
@@ -131,3 +137,30 @@ new_state TEXT, new_hash TEXT,
 timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 ```
 
+## Roadmap
+
+Potentially planned extensions, in the intended implementation order:
+
+- **Continuous monitoring (`monitor.py`)** — real-time filesystem event
+  watching (using `watchdog`) that triggers targeted verification, with
+  periodic full reconciliation scans as the integrity authority. Filesystem
+  events act as triggers only; hash verification remains the definitive
+  evidence of content changes.
+- **Extended notifications (`alerts.py`)** — the console notification
+  interface is designed so additional delivery channels can be added later,
+  such as Discord (webhook or bot), email, or phone/push notifications.
+  The specific channels are not yet decided.
+- Other planned directions: Linux compatibility and daemon/service
+  deployment, tamper-evident (hash-chained) audit logging, and more detailed
+  permission/ACL monitoring.
+
+## Limitations
+
+- The tool detects and records changes; it does not determine whether a
+  change was authorized, and it does not repair or restore files.
+- The local SQLite database is not tamper-proof; a sufficiently privileged
+  process can modify or delete it.
+- Permission/ACL changes are only detected when they cause a read failure,
+  not by inspecting permission bits.
+- The initial baseline is trusted as-is; establish it from a directory you
+  consider trustworthy.
