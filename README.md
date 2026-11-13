@@ -164,3 +164,16 @@ Potentially planned extensions, in the intended implementation order:
   not by inspecting permission bits.
 - The initial baseline is trusted as-is; establish it from a directory you
   consider trustworthy.
+
+## AI Usage Disclosure
+
+This project was developed by a human author. AI tools were used in a
+supporting role for:
+
+- **Documentation** — drafting and structuring the README, standardizing in-code documentation, and project
+  documentation.
+- **Testing** — authoring a test suite to verify functionality
+
+All architecture, application logic, and design decisions — including the
+module structure, database schema, and detection rules — are the author's
+own work
