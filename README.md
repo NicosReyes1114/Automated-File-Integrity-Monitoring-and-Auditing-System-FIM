@@ -131,17 +131,3 @@ new_state TEXT, new_hash TEXT,
 timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 ```
 
-## Testing
-
-A functional test suite covering all modules and end-to-end scan scenarios
-is included:
-
-```bash
-python test_fim.py
-```
-
-It prints a per-module PASS/FAIL report and exits non-zero on failure.
-
-## Author
-
-Julian Nicos Reyes — Version 1.0.0
